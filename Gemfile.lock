@@ -1,0 +1,12 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    aviglitch (0.1.5)
+    slop (4.2.0)
+
+PLATFORMS
+  x86-mingw32
+
+DEPENDENCIES
+  aviglitch
+  slop
