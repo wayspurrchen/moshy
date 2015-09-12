@@ -1,32 +1,21 @@
-GEM
-  remote: http://rubygems.org/
+PATH
+  remote: .
   specs:
-    activesupport (4.2.4)
-      i18n (~> 0.7)
-      json (~> 1.7, >= 1.7.7)
-      minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
-      tzinfo (~> 1.1)
-    av (0.9.0)
-      cocaine (~> 0.5.3)
+    moshy (0.1.0)
+      aviglitch
+      slop
+
+GEM
+  remote: https://rubygems.org/
+  specs:
     aviglitch (0.1.5)
-    climate_control (0.0.3)
-      activesupport (>= 3.0)
-    cocaine (0.5.7)
-      climate_control (>= 0.0.3, < 1.0)
-    i18n (0.7.0)
-    json (1.8.3)
-    minitest (5.8.0)
+    rake (10.4.2)
     slop (4.2.0)
-    thread_safe (0.3.5)
-    tzinfo (1.2.2)
-      thread_safe (~> 0.1)
 
 PLATFORMS
   ruby
-  x86-mingw32
 
 DEPENDENCIES
-  av
-  aviglitch
-  slop
+  bundler (~> 1.6)
+  moshy!
+  rake

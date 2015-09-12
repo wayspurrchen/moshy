@@ -1,6 +1,6 @@
 module Moshy
 	class ISplit
-		def initialize(args)
+		def cli(args)
 			opts = Slop::Options.new
 			opts.banner = "Usage: moshy -m isplit -i file.avi -o file_out\nmoshy -m isplit --help for details"
 			opts.separator 'Required Parameters:'
@@ -9,6 +9,7 @@ module Moshy
 			opts.separator 'Optional Parameters:'
 			opts.integer '-b', '--begin', 'Index of the I-frame at which to begin clipping (inclusive)'
 			opts.integer '-e', '--end', 'Index of the I-frame at which to stop clipping (inclusive)'
+			opts.integer '-v', '--verbose', 'Noisy output (default: false)'
 			opts.on '-h', '--help' do
 				puts opts
 				puts "\n"
@@ -59,7 +60,7 @@ made of frames 200 to 240, but you will get all clips after frame 240."
 			a = AviGlitch.open @options[:input]       # Rewrite this line for your file.
 			puts "Opened!"
 
-			split(a)
+			split(a, @options[:output], @options[:begin], @options[:end], @options[:verbose])
 		end
 
 		def clip(frames, out_path, start_index, frame_count)
@@ -70,7 +71,7 @@ made of frames 200 to 240, but you will get all clips after frame 240."
 			o.output out_path
 		end
 
-		def split(clip)
+		def split(clip, output, begin_point, end_point, verbose)
 			clip_cuts = {}
 
 			clip_count = 0
@@ -85,7 +86,7 @@ made of frames 200 to 240, but you will get all clips after frame 240."
 				if f.is_keyframe?
 					iframe_index = i
 					# Don't process frames that are before our beginning
-					if current_iframe and @options[:begin] and current_iframe < @options[:begin]
+					if current_iframe and begin_point and current_iframe < begin_point
 						# puts "skipping " + current_iframe.to_s
 						frames_in_clip = 0
 						current_iframe = current_iframe + 1
@@ -93,10 +94,10 @@ made of frames 200 to 240, but you will get all clips after frame 240."
 						# puts "last_iframe_index: " + last_iframe_index.to_s
 						next
 					end
-					break if @options[:end] and current_iframe > @options[:end]
+					break if end_point and current_iframe > end_point
 
 					if current_iframe != 0
-						if @options[:verbose]
+						if verbose
 							puts "Storing clip details: iframe_number=" + current_iframe.to_s + "; index=" + last_iframe_index.to_s + "; frame_count=" + frames_in_clip.to_s
 						end
 						clip_cuts[current_iframe] = {
@@ -112,7 +113,7 @@ made of frames 200 to 240, but you will get all clips after frame 240."
 					# clip last piece manually if we're at the end, because there's
 					# no last iframe to detect and trigger the final clip
 					if i == total_frame_count - 1
-						if @options[:verbose]
+						if verbose
 							puts "Storing clip details: iframe_number=" + current_iframe.to_s + "; index=" + last_iframe_index.to_s + "; frame_count=" + frames_in_clip.to_s
 						end
 						clip_cuts[current_iframe] = {
@@ -126,7 +127,7 @@ made of frames 200 to 240, but you will get all clips after frame 240."
 			puts clip_cuts
 
 			clip_cuts.keys.each do |f|
-				out_path = @options[:output] + '-' + f.to_s + '.avi'
+				out_path = output + '-' + f.to_s + '.avi'
 				clip(clip.frames, out_path, clip_cuts[f][:index], clip_cuts[f][:frame_count])
 			end
 

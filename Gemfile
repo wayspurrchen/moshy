@@ -1,6 +1,4 @@
-ruby '2.0.0'
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'aviglitch'
-gem 'slop'
-gem 'av'
+# Specify your gem's dependencies in moshy.gemspec
+gemspec

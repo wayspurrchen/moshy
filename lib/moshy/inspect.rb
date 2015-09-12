@@ -1,6 +1,6 @@
 module Moshy
 	class Inspect
-		def initialize(args)
+		def cli(args)
 			opts = Slop::Options.new
 			opts.banner = "Usage: moshy -m inspect -i file.avi\nmoshy -m inspect --help for details"
 			opts.separator 'Required Parameters:'

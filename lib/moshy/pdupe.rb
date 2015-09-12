@@ -1,9 +1,6 @@
-require 'aviglitch'
-require 'slop'
-
 module Moshy
 	class PDupe
-		def initialize(args)
+		def cli(args)
 			opts = Slop::Options.new
 			opts.banner = "Usage: moshy -m pdupe -i file.avi -o file_out.avi -f <integer>\nmoshy -m pdupe --help for details"
 			opts.separator 'Required Parameters:'
@@ -55,14 +52,10 @@ You can specify the number of duplicates that you want with the -d parameter."
 			a = AviGlitch.open @options[:input]       # Rewrite this line for your file.
 			puts "Opened!"
 
-			pdupe(a, @options[:interval], @options[:dupes], @options[:keep])
+			pdupe(a, @options[:output], @options[:frame], @options[:dupes])
 		end
 
-		# Loops through a video file and grabs every `interval` frames then duplicates them
-		# `duplicate_amount` times
-		# 
-		# `leave_originals` will copy standard frames and only p-frame the last one every `interval`
-		def pdupe(clip, interval, duplicate_amount, leave_originals)
+		def pdupe(clip, output, frame, duplicate_amount)
 
 			puts "Size: " + clip.frames.size_of('videoframe').to_s
 
@@ -72,8 +65,8 @@ You can specify the number of duplicates that you want with the -d parameter."
 			clip.frames.each_with_index do |f, i|
 				if f.is_videoframe?
 					video_frame_counter += 1
-					if video_frame_counter == @options[:frame]
-						puts "On frame " + @options[:frame].to_s + ", duping " + @options[:dupes].to_s + " times"
+					if video_frame_counter == frame
+						puts "On frame " + frame.to_s + ", duping " + duplicate_amount.to_s + " times"
 						clipped = clip.frames[0..(i + 5)]
 						dupe_clip = clip.frames[(i + 4), 2] * duplicate_amount
 						frames = clipped + dupe_clip
@@ -86,7 +79,7 @@ You can specify the number of duplicates that you want with the -d parameter."
 			end
 
 			o = AviGlitch.open frames
-			o.output @options[:output]
+			o.output output
 		end
 	end
 end

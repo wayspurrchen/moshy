@@ -1,6 +1,6 @@
 module Moshy
 	class Prep
-		def initialize(args)
+		def cli(args)
 			opts = Slop::Options.new
 			opts.banner = "Usage: moshy.rb -m prep -i <file> -o <output> [options]\n"
 			opts.separator 'Required Parameters:'
@@ -55,13 +55,13 @@ not be able to properly predict the motion of pixels."
 				exit
 			end
 
-			prep @options[:input]
+			prep @options[:input], @options[:output], @options[:bitrate]
 		end
 
-		def prep(file)
+		def prep(input, output, bitrate)
 			ffmpeg = Av::Commands::Ffmpeg.new
-			ffmpeg.add_source file
-			ffmpeg.add_destination @options[:output]
+			ffmpeg.add_source input
+			ffmpeg.add_destination output
 
 			# Ensures all frames come out as P-frames, B-frames don't
 			# dupe or mosh properly
@@ -70,7 +70,7 @@ not be able to properly predict the motion of pixels."
 			# ffmpeg will complain about anything over 600 and cap it.
 			ffmpeg.add_output_param ['g', 600]
 			# Bitrate
-			ffmpeg.add_output_param ['b:v', @options[:bitrate].to_s + 'k']
+			ffmpeg.add_output_param ['b:v', bitrate.to_s + 'k']
 
 			ffmpeg.run
 		end

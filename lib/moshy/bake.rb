@@ -1,6 +1,6 @@
 module Moshy
 	class Bake
-		def initialize(args)
+		def cli(args)
 			opts = Slop::Options.new
 			opts.separator 'Required Parameters:'
 			opts.string '-i', '--input', 'Input file path - can be anything that ffmpeg supports.'
@@ -39,28 +39,28 @@ module Moshy
 				exit
 			end
 
-			prep @options[:input]
+			prep @options[:input], @options[:output], @options[:pframes], @options[:'iframe-interval'], @options[:bitrate]
 		end
 
-		def prep(file)
+		def prep(file, output, pframes, iframe_interval, bitrate)
 			ffmpeg = Av::Commands::Ffmpeg.new
 			ffmpeg.add_source file
-			ffmpeg.add_destination @options[:output]
+			ffmpeg.add_destination output
 
 			# Ensures all frames come out as P-frames, B-frames don't
 			# dupe or mosh properly
-			if @options[:pframes]
+			if pframes
 				ffmpeg.add_output_param ['bf', 0]
 			end
 
 			# Keyframe interval, sets as few I-frames as possible.
 			# ffmpeg will complain about anything over 600 and cap it.
-			if @options[:'iframe-interval']
-				ffmpeg.add_output_param ['g', @options[:'iframe-interval'].to_s]
+			if iframe_interval
+				ffmpeg.add_output_param ['g', iframe_interval.to_s]
 			end
 
 			# Bitrate
-			ffmpeg.add_output_param ['b:v', @options[:bitrate].to_s + 'k']
+			ffmpeg.add_output_param ['b:v', bitrate.to_s + 'k']
 
 			ffmpeg.run
 		end

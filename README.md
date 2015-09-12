@@ -1,38 +1,29 @@
-# moshy
+# Moshy
 
-moshy is a datamoshing utility kit for AVI files, based heavily on [aviglitch](https://github.com/ucnv/aviglitch).
-It's designed to make common datamoshing tasks easier from a command line interface
-without having to open avidemux or other GUI tools. It lets you do stuff like:
+TODO: Write a gem description
 
-- Convert video files into AVI video files with minimal I-Frames and no B-frames for ultimate moshability
-- Create P-Frame duplication effects quickly
-- Split a long video file into multiple clips based on its I-Frames
-- "Bake" your datamoshed video, encoding the corruption as actual video content for uploading to video services or moshing even further!
-- Identifying keyframe and deltaframe indexes in any AVI file
-- ...and more!
+## Installation
 
-## Get it!
+Add this line to your application's Gemfile:
 
+    gem 'moshy'
 
+And then execute:
 
-## What's it do?
+    $ bundle
 
-## This is cool
+Or install it yourself as:
 
-WIP
+    $ gem install moshy
 
-(note: to use `prep` you must have ffmpeg installed)
+## Usage
 
-TODO:
+TODO: Write usage instructions here
 
-stitch
+## Contributing
 
-i1
-
-i2
-
-b1 e1
-
-b2 e2
-
-o
+1. Fork it ( https://github.com/[my-github-username]/moshy/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request

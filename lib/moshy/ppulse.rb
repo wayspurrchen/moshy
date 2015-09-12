@@ -1,6 +1,6 @@
 module Moshy
 	class PPulse
-		def initialize(args)
+		def cli(args)
 			opts = Slop::Options.new
 			opts.banner = "Usage: moshy -m ppulse -i file.avi -o file_out.avi [options]\nmoshy -m inspect --help for details"
 			opts.separator 'Required Parameters:'
@@ -69,14 +69,14 @@ effect so I recommend experimenting with it!"
 			a = AviGlitch.open @options[:input]       # Rewrite this line for your file.
 			puts "Opened!"
 
-			ppulse(a, @options[:interval], @options[:dupes], @options[:keep])
+			ppulse(a, @options[:output], @options[:interval], @options[:count], @options[:dupes], @options[:keep])
 		end
 
 		# Loops through a video file and grabs every `interval` frames then duplicates them
 		# `duplicate_amount` times
 		# 
 		# `leave_originals` will copy standard frames and only p-frame the last one every `interval`
-		def ppulse(clip, interval, duplicate_amount, leave_originals)
+		def ppulse(clip, output, interval = 30, count = 1, duplicate_amount = 30, leave_originals = true)
 
 			puts "Size: " + clip.frames.size_of('videoframe').to_s
 
@@ -98,7 +98,7 @@ effect so I recommend experimenting with it!"
 							puts "second index: " + second_index.to_s
 
 							clipped = clip.frames[first_index..(i + 5)]
-							dupe_clip = clip.frames[i, @options[:count]] * duplicate_amount
+							dupe_clip = clip.frames[i, count] * duplicate_amount
 							if frames.nil?
 								frames = clipped + dupe_clip
 							else
@@ -129,14 +129,14 @@ effect so I recommend experimenting with it!"
 							# because datamoshers are crazy and might pass use clip with no leading iframe :)
 							if frames.nil?
 								puts "First frame, setting"
-								clipped = clip.frames[i, @options[:count]]
+								clipped = clip.frames[i, count]
 								frames = frames.concat( clipped * duplicate_amount )
 								puts "Frame size"
 								puts frames.size_of('videoframe')
 							else
 								puts "Current i: " + i.to_s
 								puts "Duping frame " + i.to_s + " " + duplicate_amount.to_s + " times"
-								frames = frames.concat( clip.frames[i, @options[:count]] * duplicate_amount )
+								frames = frames.concat( clip.frames[i, count] * duplicate_amount )
 								puts "Next frame, size: " + frames.size.to_s
 							end
 						end
@@ -146,8 +146,8 @@ effect so I recommend experimenting with it!"
 			end
 
 			o = AviGlitch.open frames
-			o.output @options[:output]
-			puts "Done! File processed to: " + @options[:output]
+			o.output output
+			puts "Done! File processed to: " + output
 		end
 	end
 end
