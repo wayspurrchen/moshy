@@ -1,8 +1,9 @@
 # moshy
 
 ![](http://imgur.com/OMLTr26.gif)
+created with moshy's pdupe options
 
-moshy is a command line datamoshing utility kit for AVI files, based heavily on [aviglitch](https://github.com/ucnv/aviglitch).
+**moshy** is a command line datamoshing utility kit for AVI files, based heavily on [aviglitch](https://github.com/ucnv/aviglitch).
 It's designed to make common datamoshing tasks easier without having to open avidemux or other GUI tools. It lets you do stuff like:
 
 - Convert video files into AVI video files with minimal I-Frames and no B-frames for ultimate moshability
