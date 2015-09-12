@@ -1,16 +1,45 @@
-require 'aviglitch'
-require 'slop'
-
 module Moshy
 	class ISplit
 		def initialize(args)
 			opts = Slop::Options.new
+			opts.banner = "Usage: moshy -m isplit -i file.avi -o file_out\nmoshy -m isplit --help for details"
 			opts.separator 'Required Parameters:'
-			opts.string '-i', '--input', 'Input file path - must be an .avi. Clip to split in split mode, first clip in stitch mode'
-			opts.string '-o', '--output', 'Output file path - will be appended with -#.avi for each frame in split mode'
+			opts.string '-i', '--input', 'Input file path - must be an .avi.'
+			opts.string '-o', '--output', 'Output file path - will be appended with -#.avi for each clip.'
 			opts.separator 'Optional Parameters:'
 			opts.integer '-b', '--begin', 'Index of the I-frame at which to begin clipping (inclusive)'
 			opts.integer '-e', '--end', 'Index of the I-frame at which to stop clipping (inclusive)'
+			opts.on '-h', '--help' do
+				puts opts
+				puts "\n"
+				puts \
+"Extracts individual clips from an AVI where each clip is separated
+by I-frames in the original AVI. Great for getting specific clips out
+of a larger video and later doing I-frame moshing.
+
+Note that since this creates multiple clips, you should NOT specify
+the .avi extension in your output (-o) parameter, as moshy will
+automatically append \"-#.avi\" to the output parameter you pass
+when it spits out individual clips.
+
+If you want to only cut clips from a certain section of a larger
+video file, you can set the in- and out-points of where to get clips
+from by using the -b (--begin) and -e (--end) options, where the
+values used in those parameters are the video frame indexes to start
+and stop at.
+
+For example, if you have a file that has 800 frames, and you know you
+want the clips that occur around frames 200 to 600, you could use the
+following command to do that:
+
+moshy -m isplit -i file.avi -o file_out -b 200 -e 600
+
+Note that isplit cuts specifically at I-Frames, meaning that if you
+have used the above command and have an I-Frame at frame 180 and an
+I-Frame at frame 240, you will NOT get the clip 180 - 240 nor a clip
+made of frames 200 to 240, but you will get all clips after frame 240."
+				exit
+			end
 
 			parser = Slop::Parser.new(opts)
 			@options = parser.parse(ARGV)

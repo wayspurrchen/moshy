@@ -1,32 +1,32 @@
 require 'aviglitch'
-require 'optparse'
-
-############
-# pdupe.rb #
-############
-
-# OptionParser.new do |opts|
-#   opts.banner = "Usage: example.rb [options]"
-
-#   opts.on('-i', '--input path (required)', 'Input file - must be an .avi. Clip to split in split mode, first clip in stitch mode') { |v| $options[:input] = v }
-#   opts.on('-o', '--output path (required)', 'Output file path - will be appended with -#.avi for each frame in split mode') { |v| $options[:output] = v }
-#   opts.on('-f', '--frame number', 'Which nth frames should be duplicated', OptionParser::DecimalInteger) { |v| $options[:frame] = v }
-#   opts.on('-k', '--keep', 'Whether or not to keep standard frames, defaults true') { |v| $options[:keep] = v }
-#   opts.on('-d', '--dupes number', 'Clip begin index when in split mode', OptionParser::DecimalInteger) { |v| $options[:dupes] = v }
-#   opts.on('-v', '--verbose', 'Noisy or not') { |v| $options[:verbose] = v }
-# end.parse!
-
+require 'slop'
 
 module Moshy
 	class PDupe
 		def initialize(args)
 			opts = Slop::Options.new
+			opts.banner = "Usage: moshy -m pdupe -i file.avi -o file_out.avi -f <integer>\nmoshy -m pdupe --help for details"
 			opts.separator 'Required Parameters:'
-			opts.string '-i', '--input', 'Input file path - must be an .avi. Clip to split in split mode, first clip in stitch mode'
-			opts.string '-o', '--output', 'Output file path - will be appended with -#.avi for each frame in split mode'
+			opts.string '-i', '--input', 'Input file path - must be an .avi.'
+			opts.string '-o', '--output', 'Output file path, should be an .avi.'
 			opts.integer '-f', '--frame', 'Index of the frame that should be duplicated'
 			opts.separator 'Optional Parameters:'
 			opts.integer '-d', '--dupes', 'Number of times to multiply the frame (default: 30)'
+			opts.on '-h', '--help' do
+				puts opts
+				puts "\n"
+				puts \
+"Duplicates a P-frame at a given frame a certain amount. To find
+out which frames are P-frames, use software like avidemux to look at the
+frame type. WARNING: This mode is a little glitchy. You may need to set
+the interval 1 or 2 above or below the frame number you actually want to
+duplicate. I'm not sure why this happens, but try it with a small
+duplication amount first. NOTE: This can mode take a while to process
+over 60-90 frame dupes.
+
+You can specify the number of duplicates that you want with the -d parameter."
+				exit
+			end
 
 			default = {
 				:dupes => 30
@@ -55,14 +55,14 @@ module Moshy
 			a = AviGlitch.open @options[:input]       # Rewrite this line for your file.
 			puts "Opened!"
 
-			# ploop(clip, $options[:interval], $options[:dupes], $options[:keep])
+			pdupe(a, @options[:interval], @options[:dupes], @options[:keep])
 		end
 
 		# Loops through a video file and grabs every `interval` frames then duplicates them
 		# `duplicate_amount` times
 		# 
 		# `leave_originals` will copy standard frames and only p-frame the last one every `interval`
-		def ploop(clip, interval, duplicate_amount, leave_originals)
+		def pdupe(clip, interval, duplicate_amount, leave_originals)
 
 			puts "Size: " + clip.frames.size_of('videoframe').to_s
 
@@ -72,8 +72,8 @@ module Moshy
 			clip.frames.each_with_index do |f, i|
 				if f.is_videoframe?
 					video_frame_counter += 1
-					if video_frame_counter == $options[:frame]
-						puts "On frame " + $options[:frame].to_s + ", duping"
+					if video_frame_counter == @options[:frame]
+						puts "On frame " + @options[:frame].to_s + ", duping " + @options[:dupes].to_s + " times"
 						clipped = clip.frames[0..(i + 5)]
 						dupe_clip = clip.frames[(i + 4), 2] * duplicate_amount
 						frames = clipped + dupe_clip
@@ -86,7 +86,7 @@ module Moshy
 			end
 
 			o = AviGlitch.open frames
-			o.output $options[:output]
+			o.output @options[:output]
 		end
 	end
 end

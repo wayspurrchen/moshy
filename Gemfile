@@ -3,3 +3,4 @@ source 'http://rubygems.org'
 
 gem 'aviglitch'
 gem 'slop'
+gem 'av'

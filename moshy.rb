@@ -1,8 +1,13 @@
+require_relative 'lib/inspect'
 require_relative 'lib/isplit'
 require_relative 'lib/pdupe'
-# require_relative 'lib/ploop'
+require_relative 'lib/bake'
+require_relative 'lib/prep'
+require_relative 'lib/ppulse'
+require 'aviglitch'
 require 'optparse'
 require 'slop'
+require 'av'
 
 module Moshy
 	def self.top_level_help
@@ -14,30 +19,58 @@ module Moshy
 moshy, a Ruby utility for making it easier to datamosh AVI files. It has
 multiple modes that can be run with the -m or --mode option.
 
-	MODES
-	-----
+	MODES DETAILS
+	-------------
 
-	\"isplit\" - Extracts individual clips from an AVI where each clip is
+	\"prep\"
+	------
+	Preps a video file for datamoshing with moshy by converting it
+	into an AVI with no B-Frames (they're not good for moshing), and placing as
+	few I-Frames as possible. Requires ffmpeg be installed locally.
+
+	\"isplit\"
+	--------
+	Extracts individual clips from an AVI where each clip is
 	separated by I-frames in the original AVI. Great for getting specific
 	clips out of a larger video and later doing I-frame moshing.
-	\"pdupe\" - Duplicates a P-frame at a given frame a certain amount. To find
+
+	\"pdupe\"
+	-------
+	Duplicates a P-frame at a given frame a certain amount. To find
 	out which frames are P-frames, use software like avidemux to look at the
 	frame type. WARNING: This mode is a little glitchy. You may need to set
 	the interval 1 or 2 above or below the frame number you actually want to
 	duplicate. I'm not sure why this happens, but try it with a small
 	duplication amount first. NOTE: This can mode take a while to process
 	over 60-90 frame dupes.
-	\"ploop\" - Takes every n frames and duplicates them a given amount,
-	resulting in a consistent P-duplication datamosh that's good for creating
-	rhythmic effects. This was originally created to create mosh effects in
-	sync with a beat for a music video.
+
+	\"ppulse\"
+	--------
+	Takes c number of frames and every n frames and duplicates them a
+	given amount, resulting in a consistent P-duplication datamosh that's
+	good for creating rhythmic effects. This was originally created to
+	create mosh effects in sync with a beat for a music video.
+
+	\"bake\"
+	------
+	\"Bakes\" your datamosh by creating a new video file from your
+	datamoshed .avi, causing the datamosh effects to be treated as the actual
+	content of the new video instead of an error. Requires ffmpeg to be
+	installed locally.
+
+	\"inspect\"
+	---------
+	Reads an .avi file and prints which video frames are keyframes
+	(I-Frames) and which frames are delta frames (P-frames or B-frames). moshy
+	cannot tell the difference between a P-frame or a B-frame, so you will want
+	to use avidemux or another program if you need to know.
 
 Run moshy with mode -m <mode> --help to see options for individual modes.
 	"
 		end
 
 		begin
-		    opts.parse
+			opts.parse
 		rescue OptionParser::InvalidOption, OptionParser::InvalidArgument
 		end
 
@@ -51,7 +84,16 @@ result = Slop.parse suppress_errors: true do |o|
   o.string '-m', '--mode'
 end
 
-if result[:m] == "isplit" || result[:m] == "pdupe" || result[:m] == "ploop"
+mode_classes = {
+	"inspect" => Moshy::Inspect,
+	"isplit" => Moshy::ISplit,
+	"pdupe" => Moshy::PDupe,
+	"ppulse" => Moshy::PPulse,
+	"prep" => Moshy::Prep,
+	"bake" => Moshy::Bake
+}
+
+if mode_classes.has_key? result[:m]
 	# We need to strip out the "m" otherwise our other arg parsers
 	# will choke on the extra parameter
 	ARGV.each_with_index do |o, i|
@@ -62,15 +104,7 @@ if result[:m] == "isplit" || result[:m] == "pdupe" || result[:m] == "ploop"
 		end
 	end
 
-	case result[:m]
-	when "isplit"
-		Moshy::ISplit.new(ARGV)
-	when "pdupe"
-		Moshy::PDupe.new(ARGV)
-	when "ploop"
-		# Moshy::PDupe.new(ARGV)
-
-	end
+	mode_classes[result[:m]].new ARGV
 else
 	Moshy.top_level_help
 end
