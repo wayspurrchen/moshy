@@ -1,3 +1,5 @@
+require "aviglitch"
+require "av"
 require_relative "moshy/version"
 require_relative "moshy/inspect"
 require_relative "moshy/isplit"

@@ -26,19 +26,11 @@ when it spits out individual clips.
 If you want to only cut clips from a certain section of a larger
 video file, you can set the in- and out-points of where to get clips
 from by using the -b (--begin) and -e (--end) options, where the
-values used in those parameters are the video frame indexes to start
-and stop at.
+values used in those parameters are the indexes of the I-Frames.
+For example, if a video file has 12 I-Frames and you want the clips
+between I-Frames 3 and 7, you would use the following command:
 
-For example, if you have a file that has 800 frames, and you know you
-want the clips that occur around frames 200 to 600, you could use the
-following command to do that:
-
-moshy -m isplit -i file.avi -o file_out -b 200 -e 600
-
-Note that isplit cuts specifically at I-Frames, meaning that if you
-have used the above command and have an I-Frame at frame 180 and an
-I-Frame at frame 240, you will NOT get the clip 180 - 240 nor a clip
-made of frames 200 to 240, but you will get all clips after frame 240."
+moshy -m isplit -i file.avi -o file_out -b 3 -e 7"
 				exit
 			end
 

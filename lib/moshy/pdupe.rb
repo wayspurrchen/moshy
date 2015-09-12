@@ -68,7 +68,7 @@ You can specify the number of duplicates that you want with the -d parameter."
 					if video_frame_counter == frame
 						puts "On frame " + frame.to_s + ", duping " + duplicate_amount.to_s + " times"
 						clipped = clip.frames[0..(i + 5)]
-						dupe_clip = clip.frames[(i + 4), 2] * duplicate_amount
+						dupe_clip = clip.frames[(i + 4), 1] * duplicate_amount
 						frames = clipped + dupe_clip
 						puts "Added dupe, grabbing rest..."
 						frames = frames + clip.frames[i..-1]
