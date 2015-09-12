@@ -1,6 +1,6 @@
 # moshy
 
-![](http://imgur.com/OMLTr26.gif)
+![](http://imgur.com/OMLTr26.gif)  
 created with moshy's pdupe options
 
 **moshy** is a command line datamoshing utility kit for AVI files, based heavily on [aviglitch](https://github.com/ucnv/aviglitch).
