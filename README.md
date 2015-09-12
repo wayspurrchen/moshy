@@ -1,5 +1,7 @@
 # moshy
 
+![](http://imgur.com/OMLTr26.gif)
+
 moshy is a command line datamoshing utility kit for AVI files, based heavily on [aviglitch](https://github.com/ucnv/aviglitch).
 It's designed to make common datamoshing tasks easier without having to open avidemux or other GUI tools. It lets you do stuff like:
 
