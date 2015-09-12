@@ -17,16 +17,10 @@ If you don't know how to use the command line, this is a great opportunity to le
 
 ## Get it!
 
-You'll need to install [Ruby](https://www.ruby-lang.org/en/). If you're on Mac OS X, you probably already have a local version of Ruby installed. Once that's done, you will need Bundler, a Ruby dependency manager, which you can install with the following command:
+You'll need to install [Ruby](https://www.ruby-lang.org/en/). If you're on Mac OS X, you probably already have a local version of Ruby installed. Once that's done, you can use Rubygems (which comes with Ruby) to install moshy:
 
 ```
-gem install bundler
-```
-
-Then you can use Bundler to install moshy:
-
-```
-bundle install moshy
+gem install moshy
 ```
 
 From there, you can use `moshy` from the command line.
