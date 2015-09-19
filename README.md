@@ -66,3 +66,22 @@ the command `moshy -m <mode> --help`.
 If you think this is cool, you'll probably find my list of [glitch art resources](http://www.glitchet.com/resources)
 useful as well as the [Glitchet newsletter](http://www.glitchet.com/), a free weekly futuristic
 news and glitch aesthetic e-zine.
+
+## Quick tutorial
+
+Here's a short example of how you might use moshy to create a P-dupe mosh:
+
+1. Choose a YouTube video you want to mosh (I'll use "Charlie bit my finger": <https://www.youtube.com/watch?v=bnRVheEpJG4>)
+2. Download it with KeepVid (<http://keepvid.com/?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DbnRVheEpJG4>)
+3. "Prep" it with moshy to turn it into an .AVI with minimal I-Frames and all P-frames (because B-frames don't mosh well):  
+   `moshy -m prep -i charlie.mp4 -o charlie.avi`
+4. Open charlie.avi in avidemux and clip it down to the segment I want (moshy will soon be able to do this with a "clip" command): <http://i.imgur.com/OBy8pbB.png>
+5. Open charlie_clip.avi and find the frame I want to P-dupe mosh (here, frame 196): <http://i.imgur.com/aZsZIx6.png>
+6. Use moshy in pdupe mode to dupe frame 196 60 times:  
+   `moshy -m pdupe -i charlie_clip.avi -f 196 -d 60 -o charlie_clip-dupe.avi`  
+   Open it in a video player (I use VLC) and see if it looks good.
+7. Awesome, I love it, but I want to clip it down to size. However, since it has so few I-frames, if I just clip it anywhere, the beginning of the video will become corrupted because of lack of pixel data. Let's use moshy to bake the mosh:  
+   `moshy -m bake -i charlie_clip-dupe.avi -o charlie_clip-dupe-bake.avi`
+8. Done. Let's open it back up in avidemux, clip it down to size, and save our final result: <http://i.imgur.com/07abIqT.png>
+9. Looks good to me. Let's save it as an MP4 so that I can upload it to Giphy, which will convert it into a .gif for me. (I'm hoping to add modes to moshy that convert videos to .gif and .mp4 directly, too.)
+10. Done! <https://media.giphy.com/media/3o85xoWYyG1HEVs8Vy/giphy.gif>
