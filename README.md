@@ -28,6 +28,9 @@ gem install moshy
 
 From there, you can use `moshy` from the command line.
 
+For a couple commands (`prep` and `bake`), you need to have ffmpeg installed locally.
+[You can get it for your OS here.](https://www.ffmpeg.org/download.html)
+
 ## What's it do?
 
 Moshy currently has six different modes:
@@ -85,3 +88,7 @@ Here's a short example of how you might use moshy to create a P-dupe mosh:
 8. Done. Let's open it back up in avidemux, clip it down to size, and save our final result: ![](http://i.imgur.com/07abIqT.png)
 9. Looks good to me. Let's save it as an MP4 so that I can upload it to Giphy, which will convert it into a .gif for me. (I'm hoping to add modes to moshy that convert videos to .gif and .mp4 directly, too.)
 10. Done! ![](https://media.giphy.com/media/3o85xoWYyG1HEVs8Vy/giphy.gif)
+
+## Trouble?
+
+Having issues? Please [file an issue](https://github.com/wayspurrchen/moshy/issues/new)!
