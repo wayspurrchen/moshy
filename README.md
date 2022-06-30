@@ -31,7 +31,7 @@ If you already use moshy, run the following:
 ```
 gem uninstall moshy
 gem uninstall slop
-gem install moshy -v 2.0.0
+gem install moshy -v 2.0.1
 ```
 
 That should work. If not, please file an issue and I will try to get to it.
@@ -41,7 +41,7 @@ That should work. If not, please file an issue and I will try to get to it.
 You'll need to install [Ruby](https://www.ruby-lang.org/en/). If you're on Mac OS X, you probably already have a local version of Ruby installed. Once that's done, you can use Rubygems (which comes with Ruby) to install moshy:
 
 ```
-gem install moshy -v 2.0.0
+gem install moshy -v 2.0.1
 ```
 
 From there, you can use `moshy` from the command line.
