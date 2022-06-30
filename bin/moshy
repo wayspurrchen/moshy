@@ -79,6 +79,8 @@ result = Slop.parse suppress_errors: true do |o|
   o.string '-m', '--mode'
 end
 
+puts result
+
 mode_classes = {
   "inspect" => Moshy::Inspect,
   "isplit" => Moshy::ISplit,
