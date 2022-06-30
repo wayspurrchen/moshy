@@ -18,12 +18,20 @@ If you don't know how to use the command line, this is a great opportunity to le
 - Mac OS X Tutorial: http://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line
 - Windows Tutorial: http://lifehacker.com/5633909/who-needs-a-mouse-learn-to-use-the-command-line-for-almost-anything
 
+## June 2022 Update - Moshy 2.0.0
+
+With the release of Ruby 3, many dependencies for this project broke. I have updated this for the following versions, but I don't support this software actively anymore and haven't tested on various devices, platforms, etc., but if you have the right dependencies everything should work as normal:
+
+- Ruby 3.1.2
+- Bundler 2.3.7
+- ffmpeg 5
+
 ## Get it!
 
 You'll need to install [Ruby](https://www.ruby-lang.org/en/). If you're on Mac OS X, you probably already have a local version of Ruby installed. Once that's done, you can use Rubygems (which comes with Ruby) to install moshy:
 
 ```
-gem install moshy
+gem install moshy -v 2.0.0
 ```
 
 From there, you can use `moshy` from the command line.
